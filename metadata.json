@@ -1,0 +1,6 @@
+{
+  "name": "Bihar Registry Scraper Dashboard",
+  "description": "Secure OTP-auth dashboard monitoring the enibandhan bihar government land registration portal, solving captchas via OCR, storing listings in Firestore, and dispatching real-time notifications or compiled daily bulletins via Telegram.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

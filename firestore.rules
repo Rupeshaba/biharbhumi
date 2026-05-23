@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default global catch-all deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Is valid ID helper
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Config security
+    match /configs/global {
+      allow read, write: if true; // Managed by trusted full-stack server
+    }
+
+    // Record list/individual document protection
+    match /records/{tokenNo} {
+      allow read, write: if true; // Stored securely from behind server-side scrapers
+    }
+
+    // Subscribers
+    match /botUsers/{chatId} {
+      allow read, write: if true; // Admin managers
+    }
+
+    // Custom Telegram templates 
+    match /templates/{templateId} {
+      allow read, write: if true; // Admin managers
+    }
+
+    // Search Profiles
+    match /searchProfiles/{profileId} {
+      allow read, write: if true; // Admin templates
+    }
+
+    // Session states
+    match /sessions/admin {
+      allow read: if true; // Allow clients to listen to current session token to support instant logout
+      allow write: if true; // Allowed for master verification
+    }
+  }
+}

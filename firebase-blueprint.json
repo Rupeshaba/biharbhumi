@@ -1,0 +1,193 @@
+{
+  "entities": {
+    "Config": {
+      "title": "Config",
+      "description": "Global configuration for scraper, OCR APIs, and notification targets",
+      "type": "object",
+      "properties": {
+        "ocrApis": {
+          "type": "array",
+          "description": "List of OCR API keys"
+        },
+        "chatIds": {
+          "type": "array",
+          "description": "List of Chat IDs to notify"
+        },
+        "lastChecked": {
+          "type": "string",
+          "description": "ISO String of last checked time"
+        },
+        "lastCheckedStatus": {
+          "type": "string",
+          "description": "Outcome of last check"
+        },
+        "lastCheckedCount": {
+          "type": "number",
+          "description": "Number of new records found in last run"
+        }
+      },
+      "required": [
+        "ocrApis",
+        "chatIds"
+      ]
+    },
+    "Record": {
+      "title": "Record",
+      "description": "Scraped property registration records from enibandhan portal",
+      "type": "object",
+      "properties": {
+        "token_no": {
+          "type": "string"
+        },
+        "docket_no": {
+          "type": "string"
+        },
+        "serial_no": {
+          "type": "string"
+        },
+        "reg_date": {
+          "type": "string"
+        },
+        "chargeable_value": {
+          "type": "string"
+        },
+        "executant": {
+          "type": "string"
+        },
+        "executant_addr": {
+          "type": "string"
+        },
+        "claimant": {
+          "type": "string"
+        },
+        "claimant_addr": {
+          "type": "string"
+        },
+        "khata_no": {
+          "type": "string"
+        },
+        "plot_no": {
+          "type": "string"
+        },
+        "extent_dec": {
+          "type": "string"
+        },
+        "land_type": {
+          "type": "string"
+        },
+        "b_east": {
+          "type": "string"
+        },
+        "b_west": {
+          "type": "string"
+        },
+        "b_north": {
+          "type": "string"
+        },
+        "b_south": {
+          "type": "string"
+        },
+        "raw_json": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "token_no"
+      ]
+    },
+    "BotUser": {
+      "title": "BotUser",
+      "description": "Telegram bot subscribers managed by admin",
+      "type": "object",
+      "properties": {
+        "chatId": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "blocked": {
+          "type": "boolean"
+        },
+        "notifyEnabled": {
+          "type": "boolean"
+        },
+        "templates": {
+          "type": "array"
+        },
+        "msgType": {
+          "type": "string",
+          "enum": [
+            "new",
+            "all"
+          ]
+        }
+      },
+      "required": [
+        "chatId"
+      ]
+    },
+    "Template": {
+      "title": "Template",
+      "description": "Message template with placeholders to format Telegram notifications",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "isDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "content"
+      ]
+    },
+    "AuthSession": {
+      "title": "AuthSession",
+      "description": "Active login sessions used to manage concurrency and enforce single session",
+      "type": "object",
+      "properties": {
+        "activeToken": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "activeToken"
+      ]
+    }
+  },
+  "firestore": {
+    "configs/global": {
+      "schema": "Config",
+      "description": "Global settings and OCR API configurations"
+    },
+    "records/{tokenNo}": {
+      "schema": "Record",
+      "description": "Holds the property records indexed by token_no to ensure idempotency"
+    },
+    "botUsers/{chatId}": {
+      "schema": "BotUser",
+      "description": "Holds subscriber registrations for Telegram messages"
+    },
+    "templates/{templateId}": {
+      "schema": "Template",
+      "description": "Customized template mappings for different notifications"
+    },
+    "sessions/admin": {
+      "schema": "AuthSession",
+      "description": "Tracks single active session for instant logout concurrency check"
+    }
+  }
+}
