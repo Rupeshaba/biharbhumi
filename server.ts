@@ -33,7 +33,7 @@ const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
 const app = express();
 app.use(express.json());
 
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const REQID = "dNC91D4P-EWIB-WEUIWB-34NJDJBS";
 
 // Shared structures
